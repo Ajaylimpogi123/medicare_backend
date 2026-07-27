@@ -20,17 +20,8 @@ class AdminSeeder extends Seeder
             ]
         );
 
-        User::updateOrCreate(
-            ['email' => 'admin@gmail.com'],
-            [
-                'first_name'   => 'admin',
-                'last_name'    => 'Admin',
-                'password'     => Hash::make('password123'),
-                'phone_number' => '09171234567',
-                'role'         => 'admin',
-                'prc_id'       => null,
-            ]
-        );
+
+
         User::updateOrCreate(
             ['email' => 'admin@gmail.com'],
             [
@@ -65,6 +56,19 @@ class AdminSeeder extends Seeder
                 'role'         => 'assistant',
                 'prc_id'       => null,
             ]
+        );
+
+        ClinicUser::updateOrCreate(
+            [
+                'clinic_id' => 1,
+                'user_id' => 2,
+        ]
+        );
+        ClinicUser::updateOrCreate(
+            [
+                'clinic_id' => 1,
+                'user_id' => 3,
+        ]
         );
     }
 }
