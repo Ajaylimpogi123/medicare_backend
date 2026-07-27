@@ -12,17 +12,15 @@ class AdminSeeder extends Seeder
 {
     public function run(): void
     {
-        Clinic::updateOrCreate(
+        $clinic = Clinic::updateOrCreate(
+            ['clinic_name' => 'Main Branch'],
             [
-                'clinic_name'   => 'Main Branch',
-                'address'    => 'Bacolod',
+                'address'      => 'Bacolod',
                 'phone_number' => '09171234567',
             ]
         );
 
-
-
-        User::updateOrCreate(
+        $admin = User::updateOrCreate(
             ['email' => 'admin@gmail.com'],
             [
                 'first_name'   => 'admin',
@@ -34,7 +32,7 @@ class AdminSeeder extends Seeder
             ]
         );
 
-        User::updateOrCreate(
+        $doctor = User::updateOrCreate(
             ['email' => 'doctor@gmail.com'],
             [
                 'first_name'   => 'doctor',
@@ -46,7 +44,7 @@ class AdminSeeder extends Seeder
             ]
         );
 
-        User::updateOrCreate(
+        $staff = User::updateOrCreate(
             ['email' => 'staff@gmail.com'],
             [
                 'first_name'   => 'staff',
@@ -58,6 +56,19 @@ class AdminSeeder extends Seeder
             ]
         );
 
+        ClinicUser::updateOrCreate([
+            'clinic_id' => $clinic->id,
+            'user_id'   => $admin->id,
+        ]);
 
+        ClinicUser::updateOrCreate([
+            'clinic_id' => $clinic->id,
+            'user_id'   => $doctor->id,
+        ]);
+
+        ClinicUser::updateOrCreate([
+            'clinic_id' => $clinic->id,
+            'user_id'   => $staff->id,
+        ]);
     }
 }
