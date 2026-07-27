@@ -58,17 +58,6 @@ class AdminSeeder extends Seeder
             ]
         );
 
-        ClinicUser::updateOrCreate(
-            [
-                'clinic_id' => 1,
-                'user_id' => 2,
-        ]
-        );
-        ClinicUser::updateOrCreate(
-            [
-                'clinic_id' => 1,
-                'user_id' => 3,
-        ]
-        );
+
     }
 }
