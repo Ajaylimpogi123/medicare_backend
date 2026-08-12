@@ -6,7 +6,7 @@
 <style>
     @page {
         size: letter portrait;
-        margin: 1in;
+        margin: 0.5in;
     }
 
     * {
@@ -17,7 +17,7 @@
 
     body {
         font-family: "Times New Roman", serif;
-        font-size: 12pt;
+        font-size: 15pt;
         color: #000;
     }
 
@@ -44,7 +44,7 @@
     }
 
     .doctor-specialization {
-        font-size: 11pt;
+        font-size: 13pt;
         font-weight: bold;
         text-transform: uppercase;
         margin-bottom: 8px;
@@ -52,7 +52,7 @@
 
     .clinic-info {
         text-align: left;
-        font-size: 9pt;
+        font-size: 13pt;
         line-height: 1.4;
     }
 
@@ -80,7 +80,7 @@
 
     .label {
         font-weight: bold;
-        font-size: 10pt;
+        font-size: 13pt;
     }
 
     .value {
@@ -123,14 +123,14 @@
     }
 
     .medication-detail {
-        font-size: 13pt; /* bigger dosage/frequency */
+        font-size: 14pt; /* bigger dosage/frequency */
         margin-left: 20px;
         margin-bottom: 6px;
         line-height: 1.5;
     }
 
     .medication-note {
-        font-size: 12pt; /* bigger instructions */
+        font-size: 14pt; /* bigger instructions */
         font-style: italic;
         margin-left: 20px;
         line-height: 1.5;
@@ -152,12 +152,12 @@
     }
 
     .signature-name {
-        font-size: 10pt;
+        font-size: 13pt;
         font-weight: bold;
     }
 
     .signature-lic {
-        font-size: 9pt;
+        font-size: 12pt;
     }
 
     /* PAGE BREAK */
