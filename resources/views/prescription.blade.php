@@ -22,10 +22,10 @@
     }
 
     .page {
-    width: 6.5in;
+    width: 5.5in;
     height: 9in;
     margin: 0 auto;
-    padding: 0.5in 0.1in 0.1in 0.1in; /* top right bottom left */
+    padding: 0.1in; /* top right bottom left */
     position: relative;
     }
     /* HEADER */
@@ -203,7 +203,7 @@
 
         <div class="patient-row">
             <div class="left">
-                <span class="label">Patient Name:</span>
+                <span class="label">Patient Name.:</span>
                 <span class="value">{{ $patient['name'] }}</span>
             </div>
 
