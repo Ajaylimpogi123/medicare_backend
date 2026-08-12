@@ -6,7 +6,7 @@
 <style>
     @page {
         size: letter portrait;
-        margin: 0;
+        margin: 0.5in;
     }
 
     * {
@@ -17,16 +17,16 @@
 
     body {
         font-family: "Times New Roman", serif;
-        font-size: 15pt;
+        font-size: 17pt;
         color: #000;
     }
 
     .page {
-    width: 5.5in;
-    height: 9in;
-    margin: 0;
-    padding: 0.1in; /* top right bottom left */
-    position: relative;
+        width: 5.5in;
+        height: 9in;
+        margin: 0 auto;
+        padding: 0.15in;
+        position: relative;
     }
     /* HEADER */
     .header {
@@ -38,13 +38,13 @@
     }
 
     .doctor-name {
-        font-size: 20pt;
+        font-size: 23pt;
         font-weight: bold;
         margin-bottom: 3px;
     }
 
     .doctor-specialization {
-        font-size: 13pt;
+        font-size: 15pt;
         font-weight: bold;
         text-transform: uppercase;
         margin-bottom: 8px;
@@ -52,7 +52,7 @@
 
     .clinic-info {
         text-align: left;
-        font-size: 13pt;
+        font-size: 15pt;
         line-height: 1.4;
     }
 
@@ -80,11 +80,12 @@
 
     .label {
         font-weight: bold;
-        font-size: 13pt;
+        font-size: 15pt;
     }
 
     .value {
         display: inline-block;
+        font-size: 15pt;
         border-bottom: 1px solid #000;
         min-width: 180px;
         padding-bottom: 2px;
@@ -97,7 +98,7 @@
 
     /* RX */
     .rx-symbol {
-        font-size: 28pt;
+        font-size: 30pt;
         font-weight: bold;
         margin: 15px 0;
     }
@@ -108,14 +109,14 @@
     }
 
     .medication-block {
-        margin-bottom: 22px; /* more space between meds */
+        margin-bottom: 22px;
         padding-bottom: 16px;
         border-bottom: 1px solid #ccc;
         page-break-inside: avoid;
     }
 
     .medication-name {
-        font-size: 15pt; /* bigger medicine name */
+        font-size: 17pt;
         font-weight: bold;
         margin-bottom: 8px;
         word-wrap: break-word;
@@ -123,14 +124,14 @@
     }
 
     .medication-detail {
-        font-size: 14pt; /* bigger dosage/frequency */
+        font-size: 16pt;
         margin-left: 20px;
         margin-bottom: 6px;
         line-height: 1.5;
     }
 
     .medication-note {
-        font-size: 14pt; /* bigger instructions */
+        font-size: 16pt;
         font-style: italic;
         margin-left: 20px;
         line-height: 1.5;
@@ -152,12 +153,12 @@
     }
 
     .signature-name {
-        font-size: 13pt;
+        font-size: 15pt;
         font-weight: bold;
     }
 
     .signature-lic {
-        font-size: 12pt;
+        font-size: 14pt;
     }
 
     /* PAGE BREAK */
