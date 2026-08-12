@@ -6,7 +6,7 @@
 <style>
     @page {
         size: letter portrait;
-        margin: 0.5in;
+        margin: 0;
     }
 
     * {
@@ -24,7 +24,7 @@
     .page {
     width: 5.5in;
     height: 9in;
-    margin: 0 auto;
+    margin: 0;
     padding: 0.1in; /* top right bottom left */
     position: relative;
     }
