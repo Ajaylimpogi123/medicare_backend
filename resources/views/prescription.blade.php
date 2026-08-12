@@ -10,7 +10,6 @@
     }
 
     * {
-        margin: 0;
         padding: 0;
         box-sizing: border-box;
     }
@@ -22,7 +21,7 @@
     }
 
     .page {
-        width: 100%;
+        width: 90%;
         padding: 0.15in 0.4in 0.15in 0.15in; /* top right bottom left */
         position: relative;
     }
