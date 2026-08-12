@@ -23,8 +23,7 @@
 
     .page {
         width: 100%;
-    
-        margin-right: 0.5in;
+        margin: 0;
         padding: 0.15in;
         position: relative;
     }
@@ -62,19 +61,23 @@
     }
 
     .patient-row {
+        display: table;
         width: 100%;
         margin-bottom: 8px;
-        clear: both;
+        table-layout: fixed;
     }
 
     .left {
-        float: left;
-        width: 68%;
+        display: table-cell;
+        width: 65%;
+        vertical-align: top;
+        padding-right: 10px;
     }
 
     .right {
-        float: right;
-        width: 30%;
+        display: table-cell;
+        width: 35%;
+        vertical-align: top;
         text-align: right;
     }
 
@@ -87,13 +90,15 @@
         display: inline-block;
         font-size: 15pt;
         border-bottom: 1px solid #000;
-        min-width: 180px;
+        min-width: 140px;
         padding-bottom: 2px;
         margin-left: 5px;
+        word-wrap: break-word;
     }
 
     .small-value {
-        min-width: 50px;
+        min-width: 45px;
+        word-wrap: break-word;
     }
 
     /* RX */
@@ -165,10 +170,6 @@
     .page-break {
         page-break-before: always;
     }
-
-    .clearfix {
-        clear: both;
-    }
 </style>
 </head>
 <body>
@@ -214,8 +215,6 @@
             </div>
         </div>
 
-        <div class="clearfix"></div>
-
         <div class="patient-row">
             <div class="left">
                 <span class="label">Address:</span>
@@ -230,8 +229,6 @@
                 <span class="value small-value">{{ $patient['gender'] }}</span>
             </div>
         </div>
-
-        <div class="clearfix"></div>
 
     </div>
 
