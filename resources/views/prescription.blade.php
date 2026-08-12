@@ -23,7 +23,7 @@
 
     .page {
         width: 100%;
-        margin: 0;
+        margin: 0 0.5in 0 0;
         padding: 0.15in;
         position: relative;
     }
