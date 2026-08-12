@@ -6,7 +6,7 @@
 <style>
     @page {
         size: letter portrait;
-         margin: 0.3in 0.4in 0.3in 0.3in; /* top right bottom left */
+         margin: 0.2in; /* top right bottom left */
     }
 
     * {
