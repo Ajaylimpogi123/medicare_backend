@@ -6,7 +6,7 @@
 <style>
     @page {
         size: letter portrait;
-        margin: 0.5in;
+         margin: 0.5in 0.75in 0.5in 0.5in; /* top right bottom left */
     }
 
     * {
@@ -23,8 +23,7 @@
 
     .page {
         width: 100%;
-        margin: 0 0.5in 0 0;
-        padding: 0.15in;
+        padding: 0.15in 0.4in 0.15in 0.15in; /* top right bottom left */
         position: relative;
     }
     /* HEADER */
