@@ -17,14 +17,14 @@
 
     body {
         font-family: "Times New Roman", serif;
-        font-size: 17pt;
+        font-size: 18pt;
         color: #000;
     }
 
     .page {
-        width: 5.5in;
-        height: 9in;
-        margin: 0 auto;
+        width: 100%;
+    
+        margin: 0;
         padding: 0.15in;
         position: relative;
     }
