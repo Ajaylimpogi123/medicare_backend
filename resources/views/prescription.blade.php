@@ -24,7 +24,7 @@
     .page {
         width: 100%;
     
-        margin: 0;
+        margin-right: 0.5in;
         padding: 0.15in;
         position: relative;
     }
