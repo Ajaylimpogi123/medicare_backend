@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+    
     public function login(Request $request) {
         $request->validate([
             'email' => 'required|email',
@@ -31,6 +32,7 @@ class AuthController extends Controller
                     'last_name' => $user->last_name,
                     'role' => $user->role,
                     'prc_id' => $user->prc_id,
+                    'specialization' => $user->specialization,
                     'clinics' => $user->clinics->map(fn($c) => [
                     'id' => $c->id,
                     'clinic_name' => $c->clinic_name,
@@ -85,6 +87,7 @@ class AuthController extends Controller
                 'last_name' => $user->last_name,
                 'role' => $user->role,
                 'prc_id' => $user->prc_id,
+                'specialization' => $user->specialization,
             ]
         ], 201);
     }
@@ -95,4 +98,5 @@ class AuthController extends Controller
 
         return response()->json(['message' => 'Logged out successfully'], 200);
     }
+    
 }

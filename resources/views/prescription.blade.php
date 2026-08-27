@@ -5,8 +5,8 @@
 
 <style>
     @page {
-        size: letter portrait;
-         margin: 0.2in; /* top right bottom left */
+        size: A5 portrait;
+         margin: 0.35in; /* top right bottom left */
     }
 
     * {
