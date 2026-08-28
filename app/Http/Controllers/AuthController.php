@@ -36,6 +36,8 @@ class AuthController extends Controller
                     'clinics' => $user->clinics->map(fn($c) => [
                     'id' => $c->id,
                     'clinic_name' => $c->clinic_name,
+                     'address' => $c->address,
+                      'phone_number' => $c->phone_number,
                     ])
                 ]
                 

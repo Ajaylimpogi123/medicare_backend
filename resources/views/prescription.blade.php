@@ -6,18 +6,12 @@
 <style>
     @page {
         size: A5 portrait;
-        margin: 0.35in; /* top right bottom left */
+         margin: 0.35in; /* top right bottom left */
     }
 
     * {
-        margin: 0;
         padding: 0;
         box-sizing: border-box;
-    }
-
-    html, body {
-        width: 148mm;
-        height: 210mm;
     }
 
     body {
@@ -27,12 +21,10 @@
     }
 
     .page {
-        width: 148mm;
-        min-height: 210mm;
+        width: 95%;
         padding: 0.15in; /* top right bottom left */
         position: relative;
     }
-
     /* HEADER */
     .header {
         text-align: center;
@@ -43,7 +35,7 @@
     }
 
     .doctor-name {
-        font-size: 23pt;
+        font-size: 22pt;
         font-weight: bold;
         margin-bottom: 3px;
     }
