@@ -43,7 +43,6 @@
     .doctor-specialization {
         font-size: 11.5pt;
         font-weight: bold;
-        text-transform: uppercase;
         margin-bottom: 5px;
     }
 
