@@ -35,7 +35,7 @@
     }
 
     .doctor-name {
-        font-size: 14pt;
+        font-size: 14.5pt;
         font-weight: bold;
         margin-bottom: 3px;
     }
@@ -49,7 +49,7 @@
 
     .clinic-info {
         text-align: left;
-        font-size: 9.5pt;
+        font-size: 10pt;
     }
 
     .clinic-info p {
@@ -122,7 +122,7 @@
     }
 
     .medication-name {
-        font-size: 12pt;
+        font-size: 13pt;
         font-weight: bold;
         margin-bottom: 3px;
         word-wrap: break-word;
