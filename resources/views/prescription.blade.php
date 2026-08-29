@@ -35,21 +35,21 @@
     }
 
     .doctor-name {
-        font-size: 14.5pt;
+        font-size: 15pt;
         font-weight: bold;
         margin-bottom: 3px;
     }
 
     .doctor-specialization {
-        font-size: 10pt;
+        font-size: 11pt;
         font-weight: bold;
         text-transform: uppercase;
         margin-bottom: 5px;
     }
 
     .clinic-info {
-        text-align: left;
-        font-size: 10pt;
+        text-align: center;
+        font-size: 11pt;
     }
 
     .clinic-info p {
@@ -66,6 +66,7 @@
         width: 100%;
         margin-bottom: 5px;
         table-layout: fixed;
+        
     }
 
     .left {
@@ -84,7 +85,7 @@
 
     .label {
         font-weight: bold;
-        font-size: 10.5pt;
+        font-size: 11pt;
     }
 
     .value {
@@ -98,13 +99,13 @@
     }
 
     .small-value {
-        min-width: 32px;
+        min-width: 33px;
         word-wrap: break-word;
     }
 
     /* RX */
     .rx-symbol {
-        font-size: 18pt;
+        font-size: 18.5pt;
         font-weight: bold;
         margin: 7px 0;
     }
@@ -122,7 +123,7 @@
     }
 
     .medication-name {
-        font-size: 13pt;
+        font-size: 13.5pt;
         font-weight: bold;
         margin-bottom: 3px;
         word-wrap: break-word;
@@ -130,14 +131,14 @@
     }
 
     .medication-detail {
-        font-size: 11pt;
+        font-size: 11.5pt;
         margin-left: 12px;
         margin-bottom: 2px;
         line-height: 1.3;
     }
 
     .medication-note {
-        font-size: 11pt;
+        font-size: 11.5pt;
         font-style: italic;
         margin-left: 12px;
         line-height: 1.3;
@@ -146,7 +147,7 @@
     /* SIGNATURE FIXED BOTTOM RIGHT */
     .signature-section {
         position: absolute;
-        bottom: 0.15in;
+        bottom: 0.25in;
         right: 0;
         text-align: center;
         width: 2.2in;
@@ -159,12 +160,12 @@
     }
 
     .signature-name {
-        font-size: 10.5pt;
+        font-size: 12pt;
         font-weight: bold;
     }
 
     .signature-lic {
-        font-size: 9.5pt;
+        font-size: 11pt;
     }
 
     /* PAGE BREAK */
