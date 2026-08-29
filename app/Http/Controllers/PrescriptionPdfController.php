@@ -75,8 +75,10 @@ class PrescriptionPdfController extends Controller
             'prescriptions' => $prescriptions,
         ];
 
+        // FIX: was 'letter' — this was overriding the CSS @page A5 size
+        // entirely, since dompdf ignores @page size and uses setPaper().
         $pdf = Pdf::loadView('prescription', $data)
-            ->setPaper('letter', 'portrait');
+            ->setPaper('a5', 'portrait');
 
         $filename = 'prescription_' . $patient->last_name . '_' .
             Carbon::parse($consultation->consultation_date)->format('Ymd') . '.pdf';

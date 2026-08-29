@@ -6,7 +6,7 @@
 <style>
     @page {
         size: A5 portrait;
-         margin: 0.35in; /* top right bottom left */
+        margin: 0.3in; /* top right bottom left */
     }
 
     * {
@@ -16,52 +16,55 @@
 
     body {
         font-family: "Times New Roman", serif;
-        font-size: 18pt;
+        font-size: 13pt;
         color: #000;
     }
 
     .page {
-        width: 95%;
-        padding: 0.15in; /* top right bottom left */
+        width: 100%;
         position: relative;
     }
+
     /* HEADER */
     .header {
         text-align: center;
-        border-bottom: 2px double #000;
-        padding-bottom: 10px;
-        margin-top: 10px;
-        margin-bottom: 15px;
+        border-bottom: 1.5px double #000;
+        padding-bottom: 7px;
+        margin-top: 2px;
+        margin-bottom: 9px;
     }
 
     .doctor-name {
-        font-size: 22pt;
+        font-size: 14pt;
         font-weight: bold;
         margin-bottom: 3px;
     }
 
     .doctor-specialization {
-        font-size: 15pt;
+        font-size: 10pt;
         font-weight: bold;
         text-transform: uppercase;
-        margin-bottom: 8px;
+        margin-bottom: 5px;
     }
 
     .clinic-info {
         text-align: left;
-        font-size: 15pt;
-        line-height: 1.4;
+        font-size: 9.5pt;
+    }
+
+    .clinic-info p {
+        margin: 0;
     }
 
     /* PATIENT INFO */
     .patient-section {
-        margin-bottom: 15px;
+        margin-bottom: 9px;
     }
 
     .patient-row {
         display: table;
         width: 100%;
-        margin-bottom: 8px;
+        margin-bottom: 5px;
         table-layout: fixed;
     }
 
@@ -69,7 +72,7 @@
         display: table-cell;
         width: 65%;
         vertical-align: top;
-        padding-right: 10px;
+        padding-right: 8px;
     }
 
     .right {
@@ -81,87 +84,87 @@
 
     .label {
         font-weight: bold;
-        font-size: 15pt;
+        font-size: 10.5pt;
     }
 
     .value {
         display: inline-block;
-        font-size: 15pt;
-        border-bottom: 1px solid #000;
-        min-width: 140px;
-        padding-bottom: 2px;
-        margin-left: 5px;
+        font-size: 11pt;
+        border-bottom: 0.75px solid #000;
+        min-width: 90px;
+        padding-bottom: 1px;
+        margin-left: 3px;
         word-wrap: break-word;
     }
 
     .small-value {
-        min-width: 45px;
+        min-width: 32px;
         word-wrap: break-word;
     }
 
     /* RX */
     .rx-symbol {
-        font-size: 30pt;
+        font-size: 18pt;
         font-weight: bold;
-        margin: 15px 0;
+        margin: 7px 0;
     }
 
     /* MEDICATIONS */
     .medications-container {
-        padding-bottom: 1.5in;
+        padding-bottom: 0.55in;
     }
 
     .medication-block {
-        margin-bottom: 22px;
-        padding-bottom: 16px;
+        margin-bottom: 11px;
+        padding-bottom: 9px;
         border-bottom: 1px solid #ccc;
         page-break-inside: avoid;
     }
 
     .medication-name {
-        font-size: 17pt;
+        font-size: 12pt;
         font-weight: bold;
-        margin-bottom: 8px;
+        margin-bottom: 3px;
         word-wrap: break-word;
-        line-height: 1.4;
+        line-height: 1.3;
     }
 
     .medication-detail {
-        font-size: 16pt;
-        margin-left: 20px;
-        margin-bottom: 6px;
-        line-height: 1.5;
+        font-size: 11pt;
+        margin-left: 12px;
+        margin-bottom: 2px;
+        line-height: 1.3;
     }
 
     .medication-note {
-        font-size: 16pt;
+        font-size: 11pt;
         font-style: italic;
-        margin-left: 20px;
-        line-height: 1.5;
+        margin-left: 12px;
+        line-height: 1.3;
     }
 
     /* SIGNATURE FIXED BOTTOM RIGHT */
     .signature-section {
         position: absolute;
-        bottom: 0.3in;
-        right: 0.1in;
+        bottom: 0.15in;
+        right: 0;
         text-align: center;
-        width: 2.7in;
+        width: 2.2in;
     }
 
     .signature-line {
         width: 100%;
         border-top: 1px solid #000;
-        margin-bottom: 5px;
+        margin-bottom: 3px;
     }
 
     .signature-name {
-        font-size: 15pt;
+        font-size: 10.5pt;
         font-weight: bold;
     }
 
     .signature-lic {
-        font-size: 14pt;
+        font-size: 9.5pt;
     }
 
     /* PAGE BREAK */
@@ -173,7 +176,7 @@
 <body>
 
 @php
-    $perPage = 5;
+    $perPage = 7;
     $chunks = $prescriptions->chunk($perPage);
 @endphp
 
