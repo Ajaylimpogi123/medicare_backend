@@ -130,7 +130,7 @@
     }
 
     .medication-detail {
-        font-size: 12pt;
+        font-size: 12.5pt;
         margin-left: 12px;
         margin-bottom: 2px;
         line-height: 1.3;
