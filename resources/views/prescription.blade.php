@@ -41,7 +41,7 @@
     }
 
     .doctor-specialization {
-        font-size: 11pt;
+        font-size: 11.5pt;
         font-weight: bold;
         text-transform: uppercase;
         margin-bottom: 5px;
@@ -49,7 +49,7 @@
 
     .clinic-info {
         text-align: center;
-        font-size: 11pt;
+        font-size: 11.5pt;
     }
 
     .clinic-info p {
@@ -85,12 +85,12 @@
 
     .label {
         font-weight: bold;
-        font-size: 11pt;
+        font-size: 12pt;
     }
 
     .value {
         display: inline-block;
-        font-size: 11pt;
+        font-size: 12pt;
         border-bottom: 0.75px solid #000;
         min-width: 90px;
         padding-bottom: 1px;
@@ -131,14 +131,14 @@
     }
 
     .medication-detail {
-        font-size: 11.5pt;
+        font-size: 12pt;
         margin-left: 12px;
         margin-bottom: 2px;
         line-height: 1.3;
     }
 
     .medication-note {
-        font-size: 11.5pt;
+        font-size: 12pt;
         font-style: italic;
         margin-left: 12px;
         line-height: 1.3;
@@ -160,12 +160,12 @@
     }
 
     .signature-name {
-        font-size: 12pt;
+        font-size: 13pt;
         font-weight: bold;
     }
 
     .signature-lic {
-        font-size: 11pt;
+        font-size: 12pt;
     }
 
     /* PAGE BREAK */
