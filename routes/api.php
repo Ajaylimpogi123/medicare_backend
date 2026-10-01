@@ -38,17 +38,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('users', [UserController::class, 'index']);
     Route::put('users/{user}', [UserController::class, 'update']);
 
-    // Reference Data: Generics, Brands, Diseases
+    // Reference Data: Generics, Brands
     Route::apiResource('generics', GenericController::class);
     Route::apiResource('brands', BrandController::class);
-    Route::apiResource('diseases', DiseaseController::class);
-    Route::get('diseases/{disease}/patients', [DiseaseController::class, 'patients']);
-    Route::patch('diseases/{disease}/diagnoses/{diagnosis}', [DiseaseController::class, 'updateDiagnosisStatus']);
-
-    Route::get(
-    'consultations/{consultation}/prescription-pdf/signed-url',
-    [PrescriptionPdfController::class, 'generateSignedUrl']
-    )->middleware('auth:sanctum');
 
     // -------------------------------------------------------
     // Clinic-scoped Routes
@@ -58,6 +50,16 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('patients/{patient}/diagnoses', [PatientController::class, 'diagnoses']);
 
         Route::apiResource('consultations', ConsultationController::class);
+
+        Route::get(
+            'consultations/{consultation}/prescription-pdf/signed-url',
+            [PrescriptionPdfController::class, 'generateSignedUrl']
+        );
+
+        // Diseases (clinic-owned reference data)
+        Route::apiResource('diseases', DiseaseController::class);
+        Route::get('diseases/{disease}/patients', [DiseaseController::class, 'patients']);
+        Route::patch('diseases/{disease}/diagnoses/{diagnosis}', [DiseaseController::class, 'updateDiagnosisStatus']);
 
         // Fixed: Added 'store' to prescriptions
         Route::apiResource('prescriptions', PrescriptionController::class)->only([

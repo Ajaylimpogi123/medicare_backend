@@ -69,7 +69,7 @@ class DiseaseController extends Controller
             $disease->loadCount([
                 'consultations as total_diagnoses_count',
                 'consultations as active_diagnoses_count' => function ($query) {
-                    $query->wherePivotIn('status', ['ongoing', 'referred']);
+                    $query->whereIn('consultation_diseases.status', ['ongoing', 'referred']);
                 },
             ])
         );
@@ -162,8 +162,8 @@ class DiseaseController extends Controller
                     'prescriptions'   => $diagnosis->consultation->prescriptions->map(function ($rx) {
                         return [
                             'id'        => $rx->id,
-                            'generic'   => $rx->generic?->generic_name ?? $rx->generic_name_snapshot ?? 'Unknown',
-                            'brand'     => $rx->brand?->brand_name ?? $rx->brand_name_snapshot ?? 'Unknown',
+                            'generic'   => $rx->generic_name_snapshot ?? $rx->generic?->generic_name ?? 'Unknown',
+                            'brand'     => $rx->brand_name_snapshot ?? $rx->brand?->brand_name ?? 'Unknown',
                             'dosage'    => $rx->dosage,
                             'frequency' => $rx->frequency,
                             'duration'  => $rx->duration,
@@ -190,6 +190,14 @@ class DiseaseController extends Controller
                 'message' => 'Unauthorized. Only doctors can update diagnosis status.',
             ], 403);
         }
+
+        $this->authorizeClinicalAccess($request, $disease);
+
+        abort_unless(
+            (int) $diagnosis->disease_id === (int) $disease->id
+                && (int) $diagnosis->consultation()->value('clinic_id') === (int) $request->active_clinic_id,
+            404
+        );
 
         $validated = $request->validate([
             'status'   => 'required|in:ongoing,treated,referred',

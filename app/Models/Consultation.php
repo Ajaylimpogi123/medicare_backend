@@ -42,7 +42,7 @@ class Consultation extends Model
     // The patient this consultation belongs to
     public function patient()
     {
-        return $this->belongsTo(Patient::class, 'patient_id');
+        return $this->belongsTo(Patient::class, 'patient_id')->withTrashed();
     }
 
     // The clinic where this consultation took place

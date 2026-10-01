@@ -10,7 +10,7 @@ class Clinic extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['clinic_name', 'doctor_id', 'address', 'phone_number'];
+    protected $fillable = ['clinic_name', 'address', 'phone_number'];
 
     // The users (doctors/assistants) that work at this clinic
     public function users()

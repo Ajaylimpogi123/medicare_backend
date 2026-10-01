@@ -31,7 +31,6 @@ class PatientController extends Controller
             'phone_number'   => 'nullable|string|max:20',
             'address'        => 'nullable|string',
             'blood_type'     => 'nullable|string|max:5',
-            'clinic_id'      => 'required|exists:clinics,id',
             'civil_status'   => 'nullable|in:single,married,divorced,separated,widowed,minor',
             'height'         => 'nullable|numeric|between:0,300',
             'weight'         => 'nullable|numeric|between:0,600',
@@ -41,6 +40,15 @@ class PatientController extends Controller
         ]);
 
         $validatedData['created_by'] = $request->user()->id;
+        $validatedData['clinic_id'] = $request->active_clinic_id;
+
+        // Map request keys to the table's temp/bp columns
+        if (array_key_exists('temperature', $validatedData)) {
+            $validatedData['temp'] = $validatedData['temperature'];
+        }
+        if (array_key_exists('blood_pressure', $validatedData)) {
+            $validatedData['bp'] = $validatedData['blood_pressure'];
+        }
 
         $patient = Patient::create($validatedData);
 
@@ -81,6 +89,14 @@ class PatientController extends Controller
             'blood_pressure' => 'nullable|string|max:10',
             'allergies'      => 'nullable|string',
         ]);
+
+        // Map request keys to the table's temp/bp columns
+        if (array_key_exists('temperature', $validatedData)) {
+            $validatedData['temp'] = $validatedData['temperature'];
+        }
+        if (array_key_exists('blood_pressure', $validatedData)) {
+            $validatedData['bp'] = $validatedData['blood_pressure'];
+        }
 
         $patient->update($validatedData);
 
@@ -145,8 +161,8 @@ class PatientController extends Controller
                     'prescriptions'   => $cd->consultation->prescriptions->map(function ($rx) {
                         return [
                             'id'        => $rx->id,
-                            'generic'   => $rx->generic?->generic_name ?? $rx->generic_name_snapshot ?? 'Unknown',
-                            'brand'     => $rx->brand?->brand_name ?? $rx->brand_name_snapshot ?? 'Unknown',
+                            'generic'   => $rx->generic_name_snapshot ?? $rx->generic?->generic_name ?? 'Unknown',
+                            'brand'     => $rx->brand_name_snapshot ?? $rx->brand?->brand_name ?? 'Unknown',
                             'dosage'    => $rx->dosage,
                             'frequency' => $rx->frequency,
                             'duration'  => $rx->duration,

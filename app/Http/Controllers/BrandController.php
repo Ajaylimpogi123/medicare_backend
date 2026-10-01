@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Brand;
 use App\Models\Generic;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class BrandController extends Controller
 {
@@ -14,7 +15,12 @@ class BrandController extends Controller
 
         if ($user->role === 'assistant') {
             $clinicId = $request->header('X-Clinic-ID');
-            $doctorIds = \App\Models\Clinic::find($clinicId)
+            $clinic = $request->user()->clinics()->find($clinicId);
+            if (!$clinic) {
+                return response()->json(['message' => 'Access denied. You are not assigned to this clinic.'], 403);
+            }
+
+            $doctorIds = $clinic
                 ->users()
                 ->where('role', '=', 'doctor')
                 ->pluck('users.id');
@@ -42,7 +48,7 @@ class BrandController extends Controller
         }
 
         $validated = $request->validate([
-            'generic_id' => 'required|integer|exists:generics,id',
+            'generic_id' => ['required', 'integer', Rule::exists('generics', 'id')->whereNull('deleted_at')],
             'brand_name' => 'required|string|max:255',
         ]);
 
@@ -86,7 +92,7 @@ class BrandController extends Controller
 
         $validated = $request->validate([
             'brand_name' => 'required|string|max:255',
-            'generic_id' => 'sometimes|integer|exists:generics,id',
+            'generic_id' => ['sometimes', 'integer', Rule::exists('generics', 'id')->whereNull('deleted_at')],
         ]);
 
         if (isset($validated['generic_id'])) {

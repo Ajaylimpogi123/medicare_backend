@@ -7,8 +7,12 @@ use Illuminate\Http\Request;
 
 class ClinicController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        if ($request->user()->role !== 'admin') {
+            return response()->json(['message' => 'Unauthorized. Only admins can view clinics.'], 403);
+        }
+
         return response()->json(Clinic::orderBy('clinic_name', 'asc')->get());
     }
 
@@ -20,7 +24,6 @@ class ClinicController extends Controller
 
         $validatedData = $request->validate([
             'clinic_name' => 'required|string|max:255|unique:clinics,clinic_name',
-            'doctor_id'   => 'nullable|exists:users,id',
             'address'     => 'nullable|string',
             'phone_number' => 'nullable|string|max:20',
         ]);
@@ -33,8 +36,12 @@ class ClinicController extends Controller
         ], 201);
     }
 
-    public function show(Clinic $clinic)
+    public function show(Request $request, Clinic $clinic)
     {
+        if ($request->user()->role !== 'admin') {
+            return response()->json(['message' => 'Unauthorized. Only admins can view clinics.'], 403);
+        }
+
         return response()->json($clinic->load('users:id,first_name,last_name,role'));
     }
 
@@ -46,7 +53,6 @@ class ClinicController extends Controller
 
         $validatedData = $request->validate([
             'clinic_name'  => 'sometimes|string|max:255|unique:clinics,clinic_name,' . $clinic->id,
-            'doctor_id'    => 'nullable|exists:users,id',
             'address'      => 'nullable|string',
             'phone_number' => 'nullable|string|max:20',
         ]);

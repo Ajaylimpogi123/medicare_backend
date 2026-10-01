@@ -6,6 +6,7 @@ use App\Models\Consultation;
 use App\Models\Prescription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 class ConsultationController extends Controller
 {
@@ -40,8 +41,10 @@ class ConsultationController extends Controller
 
         $validated = $request->validate([
             // Core fields
-            'patient_id'           => 'required|exists:patients,id',
-            'clinic_id'            => 'required|exists:clinics,id',
+            'patient_id'           => [
+                'required',
+                Rule::exists('patients', 'id')->where('clinic_id', $request->active_clinic_id)->whereNull('deleted_at'),
+            ],
             'consultation_date'    => 'required|date',
             'chief_complaint'      => 'nullable|string',
             'notes'                => 'nullable|string',
@@ -57,15 +60,19 @@ class ConsultationController extends Controller
 
             // Diseases — optional array
             'diseases'                  => 'nullable|array',
-            'diseases.*.disease_id'     => 'required_with:diseases|exists:diseases,id',
+            'diseases.*.disease_id'     => [
+                'required_with:diseases',
+                'distinct',
+                Rule::exists('diseases', 'id')->where('clinic_id', $request->active_clinic_id)->whereNull('deleted_at'),
+            ],
             'diseases.*.type'           => 'required_with:diseases|in:primary,secondary',
             'diseases.*.status'         => 'nullable|in:ongoing,treated,referred',
             'diseases.*.symptoms'       => 'nullable|string',
 
             // Prescriptions — optional array
             'prescriptions'                => 'nullable|array',
-            'prescriptions.*.generic_id'   => 'required_with:prescriptions|exists:generics,id',
-            'prescriptions.*.brand_id'     => 'required_with:prescriptions|exists:brands,id',
+            'prescriptions.*.generic_id'   => ['required_with:prescriptions', Rule::exists('generics', 'id')->whereNull('deleted_at')],
+            'prescriptions.*.brand_id'     => ['required_with:prescriptions', Rule::exists('brands', 'id')->whereNull('deleted_at')],
             'prescriptions.*.dosage'       => 'required_with:prescriptions|string|max:255',
             'prescriptions.*.frequency'    => 'required_with:prescriptions|string|max:255',
             'prescriptions.*.duration'     => 'required_with:prescriptions|string|max:255',
@@ -78,7 +85,7 @@ class ConsultationController extends Controller
             $consultation = Consultation::create([
                 'doctor_id'         => $request->user()->id,
                 'patient_id'        => $validated['patient_id'],
-                'clinic_id'         => $validated['clinic_id'],
+                'clinic_id'         => $request->active_clinic_id,
                 'consultation_date' => $validated['consultation_date'],
                 'chief_complaint'   => $validated['chief_complaint'] ?? null,
                 'notes'             => $validated['notes'] ?? null,
@@ -142,8 +149,10 @@ class ConsultationController extends Controller
     }
 
     // 3. READ ONE (GET /api/consultations/{consultation})
-   public function show(Consultation $consultation)
+   public function show(Request $request, Consultation $consultation)
     {
+        abort_if((int) $consultation->clinic_id !== (int) $request->active_clinic_id, 403, 'This record does not belong to your active clinic.');
+
         return response()->json(
             $consultation->load([
                 'doctor:id,first_name,last_name',
@@ -165,6 +174,8 @@ class ConsultationController extends Controller
         if ($request->user()->role !== 'doctor') {
             return response()->json(['message' => 'Unauthorized. Only doctors can update consultations.'], 403);
         }
+
+        abort_if((int) $consultation->clinic_id !== (int) $request->active_clinic_id, 403, 'This record does not belong to your active clinic.');
 
         $validated = $request->validate([
             'consultation_date' => 'sometimes|date',
@@ -199,6 +210,8 @@ class ConsultationController extends Controller
         if ($request->user()->role !== 'doctor') {
             return response()->json(['message' => 'Unauthorized. Only doctors can delete consultations.'], 403);
         }
+
+        abort_if((int) $consultation->clinic_id !== (int) $request->active_clinic_id, 403, 'This record does not belong to your active clinic.');
 
         $consultation->delete();
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\QueueEntry;
 use App\Models\Patient;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class QueueController extends Controller
 {
@@ -45,7 +46,10 @@ class QueueController extends Controller
         $clinicId = $request->header('X-Clinic-ID');
 
         $validated = $request->validate([
-            'patient_id' => 'required|exists:patients,id',
+            'patient_id' => [
+                'required',
+                Rule::exists('patients', 'id')->where('clinic_id', $request->active_clinic_id)->whereNull('deleted_at'),
+            ],
         ]);
 
         // Prevent duplicate queue entries for same patient today

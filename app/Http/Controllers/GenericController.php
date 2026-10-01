@@ -13,7 +13,12 @@ class GenericController extends Controller
 
         if ($user->role === 'assistant') {
             $clinicId = $request->header('X-Clinic-ID');
-            $doctorIds = \App\Models\Clinic::find($clinicId)
+            $clinic = $request->user()->clinics()->find($clinicId);
+            if (!$clinic) {
+                return response()->json(['message' => 'Access denied. You are not assigned to this clinic.'], 403);
+            }
+
+            $doctorIds = $clinic
                 ->users()
                 ->where('role', '=', 'doctor')
                 ->pluck('users.id');

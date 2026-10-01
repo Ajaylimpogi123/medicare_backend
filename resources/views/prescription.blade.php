@@ -178,6 +178,10 @@
 @php
     $perPage = 7;
     $chunks = $prescriptions->chunk($perPage);
+    // Always render one page so the header and signature still print
+    if ($chunks->isEmpty()) {
+        $chunks = collect([collect()]);
+    }
 @endphp
 
 @foreach ($chunks as $chunkIndex => $chunk)

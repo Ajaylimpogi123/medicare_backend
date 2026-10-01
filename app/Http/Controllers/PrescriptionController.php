@@ -2,102 +2,103 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Brand;
 use App\Models\Consultation;
-use Barryvdh\DomPDF\Facade\Pdf;
-use Carbon\Carbon;
+use App\Models\Generic;
+use App\Models\Prescription;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
-class PrescriptionPdfController extends Controller
+class PrescriptionController extends Controller
 {
-    public function generate(Request $request, Consultation $consultation)
+    // 1. CREATE (POST /api/prescriptions)
+    // Adds a prescription to an existing consultation in the active clinic.
+    public function store(Request $request)
     {
-        // Validate signed URL
-        if (!$request->hasValidSignature()) {
-            abort(401, 'Invalid or expired link.');
+        if ($request->user()->role !== 'doctor') {
+            return response()->json(['message' => 'Unauthorized. Only doctors can create prescriptions.'], 403);
         }
 
-        // Load all needed relationships
-        $consultation->load([
-            'doctor:id,first_name,last_name,specialization,prc_id',
-            'patient:id,first_name,last_name,gender,birthdate,address',
-            'clinic:id,clinic_name,address,phone_number',
-            'prescriptions.generic:id,generic_name',
-            'prescriptions.brand:id,brand_name',
+        $validated = $request->validate([
+            'consultation_id' => 'required|exists:consultations,id',
+            'generic_id'      => ['required', Rule::exists('generics', 'id')->whereNull('deleted_at')],
+            'brand_id'        => ['required', Rule::exists('brands', 'id')->whereNull('deleted_at')],
+            'dosage'          => 'required|string|max:255',
+            'frequency'       => 'required|string|max:255',
+            'duration'        => 'required|string|max:255',
+            'instructions'    => 'nullable|string',
         ]);
 
-        $doctor = $consultation->doctor;
-        $patient = $consultation->patient;
-        $clinic = $consultation->clinic;
+        $consultation = Consultation::findOrFail($validated['consultation_id']);
+        abort_if((int) $consultation->clinic_id !== (int) $request->active_clinic_id, 403, 'This record does not belong to your active clinic.');
 
-        // Calculate patient age
-        $age = $patient->birthdate
-            ? Carbon::parse($patient->birthdate)->age
-            : null;
+        // Save the current names so printed history survives reference data edits
+        $validated['generic_name_snapshot'] = Generic::find($validated['generic_id'])?->generic_name;
+        $validated['brand_name_snapshot'] = Brand::find($validated['brand_id'])?->brand_name;
 
-        // Gender display
-        $gender = $patient->gender
-            ? strtoupper(substr($patient->gender, 0, 1))
-            : '';
+        $prescription = Prescription::create($validated);
 
-        // Build prescriptions array
-        $prescriptions = collect($consultation->prescriptions)->map(function ($rx) {
-            return [
-                'generic_name' => $rx->generic?->generic_name ?? $rx->generic_name_snapshot ?? 'Unknown',
-                'brand_name'   => $rx->brand?->brand_name ?? $rx->brand_name_snapshot ?? 'Unknown',
-                'dosage'       => $rx->dosage,
-                'frequency'    => $rx->frequency,
-                'duration'     => $rx->duration,
-                'instructions' => $rx->instructions ?? null,
-            ];
-        });
-
-        $data = [
-            'doctor' => [
-                'name'           => $doctor->first_name . ' ' . $doctor->last_name,
-                'specialization' => $doctor->specialization ?? 'General Practitioner',
-                'prc_id'         => $doctor->prc_id ?? 'N/A',
-            ],
-            'patient' => [
-                'name'    => $patient->last_name . ', ' . $patient->first_name,
-                'age'     => $age ?? '—',
-                'gender'  => $gender,
-                'address' => $patient->address ?? null,
-            ],
-            'clinic' => [
-                'name'    => $clinic->clinic_name,
-                'address' => $clinic->address ?? null,
-                'phone'   => $clinic->phone_number ?? null,
-            ],
-            'consultation' => [
-                'date' => Carbon::parse($consultation->consultation_date)
-                    ->format('m/d/Y'),
-            ],
-            'prescriptions' => $prescriptions,
-        ];
-
-        $pdf = Pdf::loadView('prescription', $data)
-            ->setPaper('a5', 'portrait');
-
-        $filename = 'prescription_' . $patient->last_name . '_' .
-            Carbon::parse($consultation->consultation_date)->format('Ymd') . '.pdf';
-
-        return $pdf->stream($filename);
+        return response()->json([
+            'message'      => 'Prescription created successfully',
+            'prescription' => $prescription->load([
+                'generic:id,generic_name',
+                'brand:id,brand_name',
+            ]),
+        ], 201);
     }
 
-    public function generateSignedUrl(Request $request, Consultation $consultation)
+    // 2. UPDATE (PUT/PATCH /api/prescriptions/{prescription})
+    // Edits an existing prescription after a consultation has been saved.
+    public function update(Request $request, Prescription $prescription)
     {
-        // Only the attending doctor or clinic staff can generate the link
-        $user = $request->user();
-        if ($user->role === 'admin') {
-            return response()->json(['message' => 'Unauthorized.'], 403);
+        if ($request->user()->role !== 'doctor') {
+            return response()->json(['message' => 'Unauthorized. Only doctors can update prescriptions.'], 403);
         }
 
-        $url = \URL::temporarySignedRoute(
-            'prescription.pdf',
-            now()->addMinutes(15),
-            ['consultation' => $consultation->id]
-        );
+        abort_if((int) $prescription->consultation()->value('clinic_id') !== (int) $request->active_clinic_id, 403, 'This record does not belong to your active clinic.');
 
-        return response()->json(['url' => $url]);
+        $validated = $request->validate([
+            'generic_id'   => ['sometimes', Rule::exists('generics', 'id')->whereNull('deleted_at')],
+            'brand_id'     => ['sometimes', Rule::exists('brands', 'id')->whereNull('deleted_at')],
+            'dosage'       => 'sometimes|string|max:255',
+            'frequency'    => 'sometimes|string|max:255',
+            'duration'     => 'sometimes|string|max:255',
+            'instructions' => 'nullable|string',
+        ]);
+
+        // Refresh snapshots when the medication changes
+        if (isset($validated['generic_id'])) {
+            $validated['generic_name_snapshot'] = Generic::find($validated['generic_id'])?->generic_name;
+        }
+        if (isset($validated['brand_id'])) {
+            $validated['brand_name_snapshot'] = Brand::find($validated['brand_id'])?->brand_name;
+        }
+
+        $prescription->update($validated);
+
+        return response()->json([
+            'message'      => 'Prescription updated successfully',
+            'prescription' => $prescription->load([
+                'generic:id,generic_name',
+                'brand:id,brand_name',
+            ]),
+        ]);
+    }
+
+    // 3. DELETE (DELETE /api/prescriptions/{prescription})
+    // Removes a prescription from a consultation.
+    public function destroy(Request $request, Prescription $prescription)
+    {
+        if ($request->user()->role !== 'doctor') {
+            return response()->json(['message' => 'Unauthorized. Only doctors can delete prescriptions.'], 403);
+        }
+
+        abort_if((int) $prescription->consultation()->value('clinic_id') !== (int) $request->active_clinic_id, 403, 'This record does not belong to your active clinic.');
+
+        $prescription->delete();
+
+        return response()->json([
+            'message' => 'Prescription removed successfully',
+        ]);
     }
 }

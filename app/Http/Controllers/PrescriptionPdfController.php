@@ -19,8 +19,8 @@ class PrescriptionPdfController extends Controller
         // Load all needed relationships
         $consultation->load([
             'doctor:id,first_name,last_name,specialization,prc_id',
-            'patient:id,first_name,last_name,gender,birthdate,address',
-            'clinic:id,clinic_name,address,phone_number',
+            'patient' => fn ($q) => $q->withTrashed()->select('id', 'first_name', 'last_name', 'gender', 'birthdate', 'address'),
+            'clinic' => fn ($q) => $q->withTrashed()->select('id', 'clinic_name', 'address', 'phone_number'),
             'prescriptions.generic:id,generic_name',
             'prescriptions.brand:id,brand_name',
         ]);
@@ -42,8 +42,8 @@ class PrescriptionPdfController extends Controller
         // Build prescriptions array
         $prescriptions = collect($consultation->prescriptions)->map(function ($rx) {
             return [
-                'generic_name' => $rx->generic?->generic_name ?? $rx->generic_name_snapshot ?? 'Unknown',
-                'brand_name'   => $rx->brand?->brand_name ?? $rx->brand_name_snapshot ?? 'Unknown',
+                'generic_name' => $rx->generic_name_snapshot ?? $rx->generic?->generic_name ?? 'Unknown',
+                'brand_name'   => $rx->brand_name_snapshot ?? $rx->brand?->brand_name ?? 'Unknown',
                 'dosage'       => $rx->dosage,
                 'frequency'    => $rx->frequency,
                 'duration'     => $rx->duration,
@@ -93,6 +93,8 @@ class PrescriptionPdfController extends Controller
         if ($user->role === 'admin') {
             return response()->json(['message' => 'Unauthorized.'], 403);
         }
+
+        abort_if((int) $consultation->clinic_id !== (int) $request->active_clinic_id, 403, 'This record does not belong to your active clinic.');
 
         $url = \URL::temporarySignedRoute(
             'prescription.pdf',
