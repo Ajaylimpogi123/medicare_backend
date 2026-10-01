@@ -270,6 +270,7 @@
         <div class="signature-line"></div>
         <div class="signature-name">{{ $doctor['name'] }}, M.D.</div>
         <div class="signature-lic">Lic No.: {{ $doctor['prc_id'] }}</div>
+        <div class="signature-lic">PTR No.: </div>
     </div>
 
 </div>
